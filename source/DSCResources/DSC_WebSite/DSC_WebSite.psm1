@@ -1310,7 +1310,7 @@ function ConvertTo-CimBinding
             }
 
             $cimProperties.Add('CertificateThumbprint', [String]$binding.certificateHash)
-            $cimProperties.Add('CertificateStoreName',  [String]$binding.certificateStoreName)
+            $cimProperties.Add('CertificateStoreName',  [String]($binding.certificateStoreName) -creplace ('^MY$','My'))
 
             New-CimInstance -ClassName $cimClassName `
                             -Namespace $cimNamespace `
@@ -1460,21 +1460,22 @@ function ConvertTo-WebBinding
 
                     if ([String]::IsNullOrEmpty($binding.CertificateStoreName))
                     {
-                        $certificateStoreName = 'MY'
+                        $certificateStoreName = 'My'
                         Write-Verbose -Message `
                             ($script:localizedData.VerboseConvertToWebBindingDefaultCertificateStoreName `
                             -f $certificateStoreName)
                     }
                     else
                     {
-                        $certificateStoreName = $binding.CertificateStoreName
+                        $certificateStoreName = $binding.CertificateStoreName -creplace ('^MY$','My')
                     }
 
                     $certificateHash = $null
                     if ($FindCertificateSplat)
                     {
                         $FindCertificateSplat.Add('Store',$CertificateStoreName)
-                        $Certificate = Find-Certificate @FindCertificateSplat | Select-Object -First 1
+                        $Certificate = Find-Certificate @FindCertificateSplat | Where-Object {$_.HasPrivateKey -eq $true} | `
+                                        Sort-Object -Property NotAfter -Descending | Select-Object -First 1
                         if ($Certificate)
                         {
                             $certificateHash = $Certificate.Thumbprint

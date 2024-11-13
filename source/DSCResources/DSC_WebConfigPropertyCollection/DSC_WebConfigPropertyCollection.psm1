@@ -247,6 +247,7 @@ function Set-TargetResource
                 -PSPath $WebsitePath `
                 -Filter $filter `
                 -Name '.' `
+                -Type $ItemName `
                 -Value @{
                     $ItemKeyName = $ItemKeyValue
                     $ItemPropertyName = $setItemPropertyValue
@@ -272,6 +273,12 @@ function Set-TargetResource
         # Remove the specified property from the element with the specified key/value.
         Write-Verbose `
             -Message ($script:localizedData.VerboseSetTargetRemoveItem -f $ItemPropertyName )
+
+        # If we are removing a single collection item with the wildcard syntax for the key, set key name to match the property name
+        if ($ItemKeyName -eq '*')
+        {
+            $ItemKeyName = $ItemPropertyName
+        }
 
         $filter = "$($Filter)/$($CollectionName)"
         Remove-WebConfigurationProperty `

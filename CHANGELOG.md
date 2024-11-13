@@ -7,6 +7,32 @@ For older change log history see the [historic changelog](HISTORIC_CHANGELOG.md)
 
 ## [Unreleased]
 
+## [4.2.1] - 2024-11-13
+
+### Added
+
+- WebConfigPropertyCollection
+  - Allowed different property collection key types to be added beyond the default.
+  - Allowed control over single item property collection key types, including examples - fixes ([issue #379](https://github.com/dsccommunity/WebAdministrationDsc/issues/379)), ([issue #631](https://github.com/dsccommunity/WebAdministrationDsc/issues/631)).
+
+### Changed
+
+- IisModule
+  - Set default for Ensure property to Present.
+- IisMimeTypeMapping
+  - Set default for Ensure property to Present.
+
+### Fixed
+
+- WebAdministrationDsc
+  - Fixed CertificateStoreName default value from `MY` to `My` ([issue #642](https://github.com/dsccommunity/WebAdministrationDsc/issues/642))
+
+### Removed
+
+- Removed outdated resources documentation from README.md.
+
+## [4.2.0] - 2024-08-26
+
 ### Removed
 
 - WebAdministrationDsc
@@ -18,11 +44,24 @@ For older change log history see the [historic changelog](HISTORIC_CHANGELOG.md)
 
 - Website
   - Add Ensure to LogCustomFieldInformation. ([issue #571](https://github.com/dsccommunity/WebAdministrationDsc/issues/571))
+  - Added code to ensure certificate selected has longest time until expiration when multiple matching certificates are found ([issue #578](https://github.com/dsccommunity/WebAdministrationDsc/issues/578))
+- WebVirtualDirectory
+  - Added Credential paramater
 
 ### Fixed
 
+- WebAdministrationDsc
+  - Fix so pipeline use GitVersion v5.
 - IisLogging
   - Can now remove all LogCustomFields using Ensure. ([issue #571](https://github.com/dsccommunity/WebAdministrationDsc/issues/571))
+-  WebSite
+   - Added code to ensure certificate has private key. ([issue #578](https://github.com/dsccommunity/WebAdministrationDsc/issues/578))
+- Removed duplicated resource descriptions in README.md
+- Added documentation for ConfigurationPath attribute of IisMimeTypeMapping in README.md
+- WebVirtualDirectory
+  - Fixed error when using UNC PhysicalPath. ([issue #94](https://github.com/dsccommunity/WebAdministrationDsc/issues/94))
+- Update build process to pin GitVersion to 5.* to resolve errors
+  (https://github.com/gaelcolas/Sampler/issues/477).
 
 ## [4.1.0] - 2023-01-03
 
@@ -39,11 +78,11 @@ For older change log history see the [historic changelog](HISTORIC_CHANGELOG.md)
   In WebVirtualDirectory WebApplication '' and '/' can now be used interchangeably.
   - Fixed Add WebVirtualDirectory when WebApplication = '/'.
   - Fixed Remove WebVirtualDirectory when WebApplication = ''.
-- CommonTestHelper  
-  Added `Invoke-UnitTestCleanup` to get consistent cleanup of stubs.  
-  Gives correct execution of integration tests when run in same PowerShell session as unit tests (no longer calling stubs).  
+- CommonTestHelper
+  Added `Invoke-UnitTestCleanup` to get consistent cleanup of stubs.
+  Gives correct execution of integration tests when run in same PowerShell session as unit tests (no longer calling stubs).
   Gives correct `Restore-WebConfiguration` after integration tests when run in same PowerShell session as unit tests (no longer calling stub).
-- MockWebAdministrationWindowsFeature  
+- MockWebAdministrationWindowsFeature
   [Issue #351](https://github.com/dsccommunity/WebAdministrationDsc/issues/351)
   Stubs now throw StubNotImplemented when they are called in order to show when a cmdlet is not mocked correctly.
 
